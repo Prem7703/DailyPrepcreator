@@ -13,7 +13,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'cyberprep.db');
+const DATA_DIR = '/data';
+
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR);
+}
+
+const DB_PATH = path.join(DATA_DIR, 'cyberprep.db');
 
 // ── Middleware ──────────────────────────────────────────────────────
 app.use(cors());
@@ -21,10 +27,11 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(__dirname));
 
-// ── Uploads dir ─────────────────────────────────────────────────────
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+// ── Uploads dir ─────────────────────────────────────────────────────const uploadDir = path.join('/data', 'uploads');
 
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => cb(null, uuidv4() + path.extname(file.originalname))
