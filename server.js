@@ -24,7 +24,7 @@ const DB_PATH = path.join(DATA_DIR, 'cyberprep.db');
 // ── Middleware ──────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(uploadDir));
 app.use(express.static(__dirname));
 
 // ── Uploads dir ─────────────────────────────────────────────────────const uploadDir = path.join('/data', 'uploads');
