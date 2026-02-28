@@ -11,6 +11,10 @@ const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'cyberprep.db');
 
