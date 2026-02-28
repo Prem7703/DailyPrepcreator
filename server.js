@@ -13,15 +13,23 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
-const DATA_DIR = '/data';
+
+// ✅ FIXED: Use project directory instead of /data
+const DATA_DIR = path.join(__dirname, 'data');
 
 if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR);
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+const uploadDir = path.join(DATA_DIR, 'uploads');
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const DB_PATH = path.join(DATA_DIR, 'cyberprep.db');
 
-// ── Middleware ──────────────────────────────────────────────────────
+// ── Middleware ─────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(uploadDir));
