@@ -1,0 +1,2890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberPrep Pro — CEH & CNSP Mastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ===== ROOT VARIABLES ===== */
+:root {
+  --bg: #050a0e;
+  --bg2: #080f15;
+  --bg3: #0d1820;
+  --card: rgba(13, 24, 32, 0.8);
+  --green: #00ff88;
+  --cyan: #00d4ff;
+  --purple: #a855f7;
+  --orange: #ff6b35;
+  --yellow: #f59e0b;
+  --red: #ff4444;
+  --text: #e0f0ff;
+  --text-dim: #7a9ab5;
+  --border: rgba(0, 255, 136, 0.15);
+  --border-bright: rgba(0, 255, 136, 0.4);
+  --glow: 0 0 20px rgba(0, 255, 136, 0.3);
+  --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.3);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-w: 260px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3 { font-family: 'Orbitron', monospace; letter-spacing: 0.05em; }
+.mono { font-family: 'Share Tech Mono', monospace; }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--green); border-radius: 3px; }
+
+/* ===== PAGE SYSTEM ===== */
+.page { display: none; }
+.page.active { display: flex; flex-direction: column; }
+#app { position: relative; z-index: 1; }
+
+/* ===== LANDING PAGE ===== */
+#landing {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 20% 50%, rgba(0,255,136,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(0,212,255,0.06) 0%, transparent 50%);
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-nav {
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.logo-icon {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--bg);
+}
+
+.landing-hero {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 80px 24px;
+  gap: 32px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,255,136,0.1);
+  border: 1px solid var(--border-bright);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  font-family: 'Share Tech Mono', monospace;
+  animation: pulse-border 2s ease infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(0,255,136,0); }
+}
+
+.hero-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--text) 0%, var(--green) 50%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-stat { text-align: center; }
+.hero-stat-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--green);
+}
+.hero-stat-label { font-size: 0.85rem; color: var(--text-dim); }
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s;
+}
+.btn:hover::before { transform: translateX(0); }
+
+.btn-primary {
+  background: var(--green);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(0,255,136,0.4);
+}
+.btn-primary:hover { box-shadow: 0 0 30px rgba(0,255,136,0.6); transform: translateY(-2px); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+.btn-secondary:hover { background: rgba(0,255,136,0.1); }
+
+.btn-ghost { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: var(--green); color: var(--green); }
+
+.btn-danger { background: var(--red); color: white; }
+.btn-danger:hover { box-shadow: 0 0 20px rgba(255,68,68,0.4); transform: translateY(-2px); }
+
+.btn-sm { padding: 7px 16px; font-size: 0.85rem; }
+.btn-xs { padding: 4px 10px; font-size: 0.78rem; }
+.btn-icon { padding: 10px; border-radius: 6px; }
+
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn:disabled:hover { transform: none; }
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+}
+.card:hover { border-color: var(--border-bright); box-shadow: var(--glow); }
+
+.glass {
+  background: rgba(13, 24, 32, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+/* ===== AUTH FORMS ===== */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,255,136,0.05) 0%, transparent 70%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  backdrop-filter: blur(20px);
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-logo-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--bg);
+  margin: 0 auto 16px;
+  box-shadow: 0 0 30px rgba(0,255,136,0.3);
+}
+
+.auth-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  color: var(--green);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle { color: var(--text-dim); font-size: 0.9rem; text-align: center; }
+
+/* ===== FORM ELEMENTS ===== */
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.form-input {
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  transition: var(--transition);
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(0,255,136,0.15);
+}
+
+.form-input::placeholder { color: rgba(120, 154, 181, 0.5); }
+
+textarea.form-input { resize: vertical; min-height: 100px; }
+select.form-input { cursor: pointer; }
+select.form-input option { background: var(--bg3); }
+
+/* ===== APP LAYOUT ===== */
+#app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  transition: var(--transition);
+}
+
+.sidebar-logo {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--bg);
+  flex-shrink: 0;
+}
+
+.sidebar-logo-text {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--green);
+  line-height: 1.2;
+}
+
+.sidebar-logo-sub { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; }
+
+.sidebar-user {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  border: 2px solid var(--border-bright);
+}
+
+.user-info { overflow: hidden; }
+.user-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 0.72rem; color: var(--green); font-family: 'Share Tech Mono', monospace; }
+
+.sidebar-nav { padding: 12px 0; flex: 1; overflow-y: auto; }
+
+.nav-section-title {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 12px 20px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: var(--transition);
+  border-left: 3px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+  user-select: none;
+}
+
+.nav-item:hover {
+  color: var(--text);
+  background: rgba(0,255,136,0.05);
+  border-left-color: rgba(0,255,136,0.3);
+}
+
+.nav-item.active {
+  color: var(--green);
+  background: rgba(0,255,136,0.08);
+  border-left-color: var(--green);
+}
+
+.nav-item i { width: 18px; text-align: center; font-size: 0.9rem; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--green);
+  color: var(--bg);
+  border-radius: 100px;
+  padding: 1px 7px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.sidebar-bottom {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-bar {
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg2);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+}
+
+.page-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  color: var(--green);
+}
+
+.breadcrumb { font-size: 0.85rem; color: var(--text-dim); }
+.breadcrumb span { color: var(--green); }
+
+.content-area { padding: 32px; flex: 1; }
+
+/* ===== DASHBOARD ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+}
+
+.stat-card:hover { border-color: var(--border-bright); transform: translateY(-2px); box-shadow: var(--glow); }
+
+.stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.stat-label { font-size: 0.8rem; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.stat-value { font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 700; line-height: 1; }
+.stat-sub { font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar-wrap {
+  background: rgba(0,0,0,0.4);
+  border-radius: 100px;
+  overflow: hidden;
+  height: 8px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--green), var(--cyan));
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(0,255,136,0.5);
+  position: relative;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 20px; height: 100%;
+  background: rgba(255,255,255,0.3);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { opacity: 0; transform: translateX(-10px); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(10px); }
+}
+
+.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.progress-label { font-size: 0.9rem; color: var(--text-dim); }
+.progress-pct { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--green); font-weight: 700; }
+
+/* ===== PLAN CARDS ===== */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.plan-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(0,255,136,0.05), transparent 60%);
+  pointer-events: none;
+}
+
+.plan-card:hover {
+  border-color: var(--border-bright);
+  box-shadow: var(--glow);
+  transform: translateY(-4px);
+}
+
+.plan-card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+
+.plan-icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.plan-icon.ceh { background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,212,255,0.2)); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+.plan-icon.cnsp { background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(0,212,255,0.2)); color: var(--purple); border: 1px solid rgba(168,85,247,0.3); }
+.plan-icon.custom { background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(245,158,11,0.2)); color: var(--orange); border: 1px solid rgba(255,107,53,0.3); }
+
+.plan-name { font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700; }
+.plan-desc { font-size: 0.85rem; color: var(--text-dim); margin-top: 2px; }
+
+.plan-stats { display: flex; gap: 20px; margin-bottom: 16px; }
+.plan-stat-item { text-align: center; }
+.plan-stat-num { font-family: 'Orbitron', monospace; font-size: 1.2rem; font-weight: 700; color: var(--green); }
+.plan-stat-lbl { font-size: 0.72rem; color: var(--text-dim); }
+
+/* ===== TOPIC LIST ===== */
+.topic-list { display: flex; flex-direction: column; gap: 10px; }
+
+.topic-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topic-item:hover { border-color: var(--border-bright); background: rgba(13,24,32,0.95); }
+.topic-item.completed { border-color: rgba(0,255,136,0.4); background: rgba(0,255,136,0.05); }
+.topic-item.in-progress { border-color: rgba(245,158,11,0.4); }
+
+.topic-day {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  min-width: 50px;
+  flex-shrink: 0;
+}
+
+.topic-status-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot-notstarted { background: var(--text-dim); }
+.status-dot-inprogress { background: var(--yellow); box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+.status-dot-completed { background: var(--green); box-shadow: 0 0 8px rgba(0,255,136,0.5); }
+
+.topic-info { flex: 1; min-width: 0; }
+.topic-title-text { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topic-meta { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; }
+
+.topic-progress-mini { width: 80px; flex-shrink: 0; }
+.topic-pct { font-family: 'Orbitron', monospace; font-size: 0.75rem; color: var(--green); text-align: right; margin-bottom: 4px; }
+
+.topic-checks { display: flex; gap: 6px; flex-shrink: 0; }
+.check-icon { width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; }
+.check-done { background: rgba(0,255,136,0.2); color: var(--green); border: 1px solid var(--green); }
+.check-pending { background: rgba(0,0,0,0.3); color: var(--text-dim); border: 1px solid var(--border); }
+
+/* ===== TOPIC DETAIL ===== */
+.topic-detail {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+}
+
+@media (max-width: 1100px) { .topic-detail { grid-template-columns: 1fr; } }
+
+.subtopics-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
+.subtopic-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.subtopic-item:hover { border-color: var(--border-bright); background: rgba(0,255,136,0.03); }
+.subtopic-item.done { background: rgba(0,255,136,0.08); border-color: rgba(0,255,136,0.3); }
+
+.subtopic-checkbox {
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  border: 2px solid var(--border-bright);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.subtopic-item.done .subtopic-checkbox {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--bg);
+  font-size: 0.7rem;
+}
+
+.subtopic-text { font-size: 0.95rem; }
+.subtopic-item.done .subtopic-text { text-decoration: line-through; color: var(--text-dim); }
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title i { color: var(--green); }
+
+/* ===== VIDEO LINKS ===== */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+
+.video-item {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.video-thumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: rgba(0,0,0,0.5);
+  cursor: pointer;
+}
+
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.video-thumb-placeholder { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 2.5rem; color: var(--red); }
+.video-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: var(--transition);
+}
+.video-thumb:hover .video-play { opacity: 1; }
+.video-play i { font-size: 2rem; color: white; }
+
+.video-info { padding: 12px; }
+.video-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.video-actions { display: flex; gap: 8px; margin-top: 8px; }
+
+/* ===== PDF RESOURCES ===== */
+.pdf-list { display: flex; flex-direction: column; gap: 10px; }
+
+.pdf-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.pdf-icon { font-size: 1.5rem; color: var(--red); flex-shrink: 0; }
+.pdf-name { flex: 1; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pdf-actions { display: flex; gap: 6px; }
+
+/* ===== NOTES EDITOR ===== */
+.notes-editor {
+  min-height: 200px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  outline: none;
+  resize: none;
+  width: 100%;
+  transition: var(--transition);
+}
+.notes-editor:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0,255,136,0.1); }
+
+/* ===== COMPLETION TRACKING ===== */
+.completion-trackers {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.tracker-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tracker-item:hover { border-color: var(--border-bright); }
+.tracker-item.done { background: rgba(0,255,136,0.08); border-color: rgba(0,255,136,0.4); }
+
+.tracker-toggle {
+  width: 44px; height: 24px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 100px;
+  position: relative;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.tracker-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  transition: var(--transition);
+}
+.tracker-item.done .tracker-toggle { background: var(--green); }
+.tracker-item.done .tracker-toggle::after { left: 23px; background: var(--bg); }
+
+.tracker-icon { font-size: 1.2rem; }
+.tracker-info { flex: 1; }
+.tracker-name { font-weight: 600; font-size: 0.9rem; }
+.tracker-desc { font-size: 0.78rem; color: var(--text-dim); }
+
+/* ===== LINK INPUTS ===== */
+.link-row { display: flex; gap: 8px; align-items: center; }
+.link-row .form-input { flex: 1; }
+
+/* ===== HEATMAP ===== */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(26, 1fr);
+  gap: 3px;
+}
+
+.heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: rgba(0,255,136,0.05);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.heatmap-cell:hover { transform: scale(1.3); z-index: 1; }
+.heatmap-cell.level-1 { background: rgba(0,255,136,0.2); border-color: rgba(0,255,136,0.3); }
+.heatmap-cell.level-2 { background: rgba(0,255,136,0.4); border-color: rgba(0,255,136,0.5); }
+.heatmap-cell.level-3 { background: rgba(0,255,136,0.7); border-color: rgba(0,255,136,0.7); }
+.heatmap-cell.level-4 { background: var(--green); border-color: var(--green); box-shadow: 0 0 6px rgba(0,255,136,0.6); }
+
+/* ===== TOAST NOTIFICATIONS ===== */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  padding: 14px 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideUp 0.3s ease;
+  cursor: pointer;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.toast-success { background: rgba(0,30,15,0.95); border-color: var(--green); }
+.toast-error { background: rgba(30,0,0,0.95); border-color: var(--red); }
+.toast-info { background: rgba(0,15,30,0.95); border-color: var(--cyan); }
+.toast-warning { background: rgba(30,20,0,0.95); border-color: var(--yellow); }
+.toast-icon { font-size: 1rem; flex-shrink: 0; }
+.toast-success .toast-icon { color: var(--green); }
+.toast-error .toast-icon { color: var(--red); }
+.toast-info .toast-icon { color: var(--cyan); }
+.toast-warning .toast-icon { color: var(--yellow); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.95);
+  transition: transform 0.3s;
+}
+
+.modal-overlay.open .modal { transform: scale(1); }
+.modal-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Orbitron', monospace; font-size: 1rem; color: var(--green); }
+.modal-close { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1.2rem; padding: 4px; }
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; gap: 12px; justify-content: flex-end; }
+
+/* ===== ACHIEVEMENT CARD ===== */
+#achievement-canvas-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+#achievement-canvas {
+  border-radius: 12px;
+  max-width: 100%;
+}
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: confetti-fall 3s ease-in forwards;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== PROGRESS PAGE ===== */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } }
+
+/* ===== LOADER ===== */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+  transition: opacity 0.3s;
+}
+
+.loader-ring {
+  width: 60px; height: 60px;
+  border: 3px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== STATUS BADGE ===== */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.status-not-started { background: rgba(120,154,181,0.1); color: var(--text-dim); border: 1px solid var(--border); }
+.status-in-progress { background: rgba(245,158,11,0.1); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+.status-completed { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+
+/* ===== ADD NEW ROW ===== */
+.add-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* ===== STREAK ===== */
+.streak-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.4rem;
+  color: var(--orange);
+}
+
+/* ===== TAG ===== */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.tag-green { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
+.tag-purple { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.2); }
+.tag-orange { background: rgba(255,107,53,0.1); color: var(--orange); border: 1px solid rgba(255,107,53,0.2); }
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-dim);
+}
+.empty-state i { font-size: 3rem; opacity: 0.3; margin-bottom: 16px; display: block; }
+.empty-state h3 { font-size: 1rem; margin-bottom: 8px; color: var(--text); }
+
+/* ===== DIVIDER ===== */
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+/* ===== GRID UTILS ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.gap-20 { gap: 20px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.text-green { color: var(--green); }
+.text-cyan { color: var(--cyan); }
+.text-dim { color: var(--text-dim); }
+.text-sm { font-size: 0.85rem; }
+.text-xs { font-size: 0.75rem; }
+.font-mono { font-family: 'Share Tech Mono', monospace; }
+.w-full { width: 100%; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+  .content-area { padding: 20px 16px; }
+  .top-bar { padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+<!-- Loader -->
+<div class="loader-overlay" id="loader">
+  <div>
+    <div class="loader-ring"></div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Achievement Modal -->
+<div class="modal-overlay" id="achievementModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <span class="modal-title">🏆 Achievement Unlocked!</span>
+      <button class="modal-close" onclick="closeAchievementModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div id="achievement-canvas-wrap">
+        <canvas id="achievement-canvas" width="480" height="280"></canvas>
+      </div>
+      <div class="flex gap-12 mt-16">
+        <button class="btn btn-primary w-full" onclick="downloadAchievementCard()"><i class="fas fa-download"></i> Download PNG</button>
+        <button class="btn btn-secondary w-full" onclick="shareToLinkedIn()"><i class="fab fa-linkedin"></i> Share to LinkedIn</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Generic Modal -->
+<div class="modal-overlay" id="genericModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="genericModalTitle">Modal</span>
+      <button class="modal-close" onclick="closeGenericModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="genericModalBody"></div>
+    <div class="modal-footer" id="genericModalFooter"></div>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<script>
+// ===================================================================
+// CYBERPREP PRO - Full SPA Application
+// ===================================================================
+
+const API = '/api';
+let currentUser = null;
+let currentPage = null;
+let currentPlanId = null;
+let currentTopicId = null;
+let plans = [];
+let notesAutoSave = null;
+
+// ===================================================================
+// UTILITIES
+// ===================================================================
+
+function $(id) { return document.getElementById(id); }
+
+function showLoader() { $('loader').style.display = 'flex'; }
+function hideLoader() { $('loader').style.display = 'none'; }
+
+function toast(msg, type = 'info', duration = 3500) {
+  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle', warning: 'fa-exclamation-triangle' };
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.innerHTML = `<i class="fas ${icons[type]} toast-icon"></i><span>${msg}</span>`;
+  el.onclick = () => el.remove();
+  $('toastContainer').appendChild(el);
+  setTimeout(() => el.remove(), duration);
+}
+
+async function api(method, endpoint, body) {
+  const token = localStorage.getItem('cp_token');
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + endpoint, opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+function getYouTubeId(url) {
+  const m = url.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function formatDate(d) {
+  if (!d) return 'N/A';
+  return new Date(d).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// ===================================================================
+// APP INIT
+// ===================================================================
+
+async function init() {
+  const token = localStorage.getItem('cp_token');
+  if (token) {
+    try {
+      currentUser = await api('GET', '/auth/me');
+      hideLoader();
+      renderApp();
+      navigateTo('dashboard');
+    } catch {
+      localStorage.removeItem('cp_token');
+      hideLoader();
+      renderLanding();
+    }
+  } else {
+    hideLoader();
+    renderLanding();
+  }
+}
+
+// ===================================================================
+// LANDING PAGE
+// ===================================================================
+
+function renderLanding() {
+  document.getElementById('app').innerHTML = `
+    <div id="landing">
+      <nav class="landing-nav">
+        <div class="logo">
+          <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+          CyberPrep Pro
+        </div>
+        <div class="flex gap-12">
+          <button class="btn btn-ghost btn-sm" onclick="renderLogin()">Login</button>
+          <button class="btn btn-primary btn-sm" onclick="renderSignup()">Get Started Free</button>
+        </div>
+      </nav>
+      
+      <div class="landing-hero">
+        <div class="hero-badge"><i class="fas fa-circle-dot"></i> LIVE PLATFORM &nbsp;|&nbsp; CEH + CNSP MASTERY</div>
+        
+        <h1 class="hero-title">Master Cybersecurity<br>Certifications</h1>
+        
+        <p class="hero-subtitle">
+          The ultimate structured learning platform for CEH and CNSP preparation. 
+          Track progress, manage resources, and earn LinkedIn-shareable achievements.
+        </p>
+        
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num">30+</div>
+            <div class="hero-stat-label">Days Structured</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">100%</div>
+            <div class="hero-stat-label">Free to Use</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">2</div>
+            <div class="hero-stat-label">Certifications</div>
+          </div>
+        </div>
+        
+        <div class="hero-buttons">
+          <button class="btn btn-primary" onclick="renderSignup()"><i class="fas fa-rocket"></i> Start Learning Free</button>
+          <button class="btn btn-secondary" onclick="renderLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </div>
+        
+        <div style="margin-top:48px;display:flex;gap:24px;flex-wrap:wrap;justify-content:center">
+          <div class="card" style="text-align:center;padding:20px 32px;cursor:default">
+            <div style="font-size:1.5rem;margin-bottom:8px">🎓</div>
+            <div style="font-weight:600;color:var(--green)">CEH v13</div>
+            <div class="text-sm text-dim">30-Day Roadmap</div>
+          </div>
+          <div class="card" style="text-align:center;padding:20px 32px;cursor:default">
+            <div style="font-size:1.5rem;margin-bottom:8px">🔐</div>
+            <div style="font-weight:600;color:var(--purple)">CNSP</div>
+            <div class="text-sm text-dim">30-Day Roadmap</div>
+          </div>
+          <div class="card" style="text-align:center;padding:20px 32px;cursor:default">
+            <div style="font-size:1.5rem;margin-bottom:8px">🏆</div>
+            <div style="font-weight:600;color:var(--yellow)">LinkedIn Cards</div>
+            <div class="text-sm text-dim">Auto-Generated</div>
+          </div>
+          <div class="card" style="text-align:center;padding:20px 32px;cursor:default">
+            <div style="font-size:1.5rem;margin-bottom:8px">📊</div>
+            <div style="font-weight:600;color:var(--cyan)">Analytics</div>
+            <div class="text-sm text-dim">Visual Progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ===================================================================
+// AUTH PAGES
+// ===================================================================
+
+function renderLogin() {
+  document.getElementById('app').innerHTML = `
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <div class="auth-logo-icon"><i class="fas fa-shield-halved"></i></div>
+          <div class="auth-title">Welcome Back</div>
+          <div class="auth-subtitle">Login to continue your cyber journey</div>
+        </div>
+        <div id="authError" style="display:none;padding:12px;background:rgba(255,68,68,0.1);border:1px solid var(--red);border-radius:8px;margin-bottom:16px;font-size:0.85rem;color:var(--red)"></div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" id="loginEmail" type="email" placeholder="hacker@example.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="loginPwd" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn btn-primary w-full" id="loginBtn" onclick="doLogin()">
+          <i class="fas fa-sign-in-alt"></i> Login to CyberPrep Pro
+        </button>
+        <p style="text-align:center;margin-top:20px;font-size:0.85rem;color:var(--text-dim)">
+          No account? <a href="#" onclick="renderSignup()" style="color:var(--green)">Sign up free</a>
+        </p>
+        <p style="text-align:center;margin-top:8px;font-size:0.85rem">
+          <a href="#" onclick="renderLanding()" style="color:var(--text-dim)">← Back to home</a>
+        </p>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('loginPwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+}
+
+function renderSignup() {
+  document.getElementById('app').innerHTML = `
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <div class="auth-logo-icon"><i class="fas fa-user-shield"></i></div>
+          <div class="auth-title">Join CyberPrep Pro</div>
+          <div class="auth-subtitle">Start your CEH & CNSP journey today</div>
+        </div>
+        <div id="authError" style="display:none;padding:12px;background:rgba(255,68,68,0.1);border:1px solid var(--red);border-radius:8px;margin-bottom:16px;font-size:0.85rem;color:var(--red)"></div>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" id="regName" type="text" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" id="regEmail" type="email" placeholder="hacker@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password (min 6 characters)</label>
+          <input class="form-input" id="regPwd" type="password" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary w-full" onclick="doRegister()">
+          <i class="fas fa-rocket"></i> Create Free Account
+        </button>
+        <p style="text-align:center;margin-top:20px;font-size:0.85rem;color:var(--text-dim)">
+          Already have account? <a href="#" onclick="renderLogin()" style="color:var(--green)">Login</a>
+        </p>
+        <p style="text-align:center;margin-top:8px;font-size:0.85rem">
+          <a href="#" onclick="renderLanding()" style="color:var(--text-dim)">← Back to home</a>
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+async function doLogin() {
+  const email = $('loginEmail').value.trim();
+  const pwd = $('loginPwd').value;
+  const errEl = $('authError');
+  
+  try {
+    $('loginBtn').disabled = true;
+    $('loginBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+    const data = await api('POST', '/auth/login', { email, password: pwd });
+    localStorage.setItem('cp_token', data.token);
+    currentUser = data.user;
+    renderApp();
+    navigateTo('dashboard');
+    toast('Welcome back, ' + currentUser.name + '!', 'success');
+  } catch (e) {
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
+    $('loginBtn').disabled = false;
+    $('loginBtn').innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to CyberPrep Pro';
+  }
+}
+
+async function doRegister() {
+  const name = $('regName').value.trim();
+  const email = $('regEmail').value.trim();
+  const pwd = $('regPwd').value;
+  const errEl = $('authError');
+  
+  try {
+    const data = await api('POST', '/auth/register', { name, email, password: pwd });
+    localStorage.setItem('cp_token', data.token);
+    currentUser = data.user;
+    renderApp();
+    navigateTo('dashboard');
+    toast('Welcome to CyberPrep Pro, ' + currentUser.name + '! Your CEH & CNSP plans are ready.', 'success', 5000);
+  } catch (e) {
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('cp_token');
+  currentUser = null;
+  plans = [];
+  renderLanding();
+  toast('Logged out successfully.', 'info');
+}
+
+// ===================================================================
+// MAIN APP LAYOUT
+// ===================================================================
+
+function renderApp() {
+  document.getElementById('app').innerHTML = `
+    <div id="app-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-shield-halved"></i></div>
+          <div>
+            <div class="sidebar-logo-text">CyberPrep Pro</div>
+            <div class="sidebar-logo-sub">CEH & CNSP MASTERY</div>
+          </div>
+        </div>
+        
+        <div class="sidebar-user">
+          <div class="user-avatar" style="background:rgba(0,255,136,0.1);color:${currentUser?.avatar_color || '#00ff88'}">
+            ${(currentUser?.name || 'U')[0].toUpperCase()}
+          </div>
+          <div class="user-info">
+            <div class="user-name">${currentUser?.name || 'User'}</div>
+            <div class="user-role">// CYBER STUDENT</div>
+          </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section-title">MAIN</div>
+          <div class="nav-item" data-page="dashboard" onclick="navigateTo('dashboard')">
+            <i class="fas fa-gauge-high"></i> Dashboard
+          </div>
+          
+          <div class="nav-section-title">CERTIFICATIONS</div>
+          <div class="nav-item" data-page="ceh" onclick="navigateToPlan('CEH')">
+            <i class="fas fa-shield-halved"></i> CEH Plan
+          </div>
+          <div class="nav-item" data-page="cnsp" onclick="navigateToPlan('CNSP')">
+            <i class="fas fa-network-wired"></i> CNSP Plan
+          </div>
+          <div class="nav-section-title">TOOLS</div>
+          <div class="nav-item" data-page="progress" onclick="navigateTo('progress')">
+            <i class="fas fa-chart-line"></i> My Progress
+          </div>
+          <div class="nav-item" data-page="notes" onclick="navigateTo('notes')">
+            <i class="fas fa-note-sticky"></i> All Notes
+          </div>
+          <div class="nav-item" data-page="plans" onclick="navigateTo('plans')">
+            <i class="fas fa-folder-open"></i> All Plans
+          </div>
+          <div class="nav-item" data-page="profile" onclick="navigateTo('profile')">
+            <i class="fas fa-user-circle"></i> My Profile
+          </div>
+        </nav>
+        
+        <div class="sidebar-bottom">
+          <button class="btn btn-ghost w-full" onclick="logout()" style="justify-content:center">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </aside>
+      
+      <main class="main-content">
+        <div class="top-bar">
+          <div>
+            <div class="page-title" id="topbarTitle">Dashboard</div>
+            <div class="breadcrumb" id="topbarBreadcrumb">CyberPrep Pro</div>
+          </div>
+          <div class="flex gap-12 items-center">
+            <div class="streak-display" id="streakDisplay" title="Study Streak">
+              <i class="fas fa-fire"></i> <span id="streakCount">0</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="content-area" id="contentArea"></div>
+      </main>
+    </div>
+  `;
+}
+
+function setActiveNav(page) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const match = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (match) match.classList.add('active');
+}
+
+function setTopbar(title, breadcrumb) {
+  const t = $('topbarTitle');
+  const b = $('topbarBreadcrumb');
+  if (t) t.textContent = title;
+  if (b) b.innerHTML = breadcrumb;
+}
+
+// ===================================================================
+// NAVIGATION
+// ===================================================================
+
+async function navigateTo(page) {
+  currentPage = page;
+  setActiveNav(page);
+  switch(page) {
+    case 'dashboard': await renderDashboard(); break;
+    case 'progress': await renderProgress(); break;
+    case 'notes': await renderAllNotes(); break;
+    case 'plans': await renderPlansPage(); break;
+    case 'profile': await renderProfile(); break;
+  }
+}
+
+async function navigateToPlan(planName) {
+  currentPage = planName.toLowerCase();
+  setActiveNav(planName.toLowerCase());
+  await renderPlanPage(planName);
+}
+
+// ===================================================================
+// DASHBOARD
+// ===================================================================
+
+async function renderDashboard() {
+  setTopbar('Dashboard', 'CyberPrep Pro');
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="loader-ring" style="margin:0 auto"></div></div>`;
+  
+  try {
+    const [stats, plansData] = await Promise.all([
+      api('GET', '/plans/stats/dashboard'),
+      api('GET', '/plans')
+    ]);
+    plans = plansData;
+    
+    // Update streak
+    if ($('streakCount')) $('streakCount').textContent = stats.streak || 0;
+    
+    const ceh = plans.find(p => p.plan_name === 'CEH');
+    const cnsp = plans.find(p => p.plan_name === 'CNSP');
+    const others = plans.filter(p => p.plan_name !== 'CEH' && p.plan_name !== 'CNSP');
+    
+    $('contentArea').innerHTML = `
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(0,255,136,0.1)"><i class="fas fa-check-circle text-green"></i></div>
+          <div class="stat-label">Topics Completed</div>
+          <div class="stat-value text-green">${stats.totalCompleted}</div>
+          <div class="stat-sub">of ${stats.totalTopics} total topics</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(0,212,255,0.1)"><i class="fas fa-percent" style="color:var(--cyan)"></i></div>
+          <div class="stat-label">Overall Progress</div>
+          <div class="stat-value" style="color:var(--cyan)">${stats.overallProgress}%</div>
+          <div class="stat-sub">across all plans</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(255,107,53,0.1)"><i class="fas fa-fire" style="color:var(--orange)"></i></div>
+          <div class="stat-label">Study Streak</div>
+          <div class="stat-value" style="color:var(--orange)">${stats.streak}</div>
+          <div class="stat-sub">consecutive days</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(168,85,247,0.1)"><i class="fas fa-folder-open" style="color:var(--purple)"></i></div>
+          <div class="stat-label">Active Plans</div>
+          <div class="stat-value" style="color:var(--purple)">${plans.length}</div>
+          <div class="stat-sub">learning tracks</div>
+        </div>
+      </div>
+      
+      <!-- OVERALL PROGRESS -->
+      <div class="card mb-24">
+        <div class="progress-header mb-12">
+          <span class="section-title"><i class="fas fa-chart-line"></i> Overall Mastery Progress</span>
+          <span class="progress-pct">${stats.overallProgress}%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" style="width:0%" id="mainProgressBar"></div>
+        </div>
+        <div class="text-sm text-dim mt-8">${stats.totalCompleted} topics completed · ${stats.totalTopics - stats.totalCompleted} remaining</div>
+      </div>
+      
+      <!-- PLAN CARDS -->
+      <div class="section-header">
+        <div class="section-title"><i class="fas fa-folder-open"></i> Your Certification Plans</div>
+        <button class="btn btn-primary btn-sm" onclick="showCreatePlanModal()"><i class="fas fa-plus"></i> New Plan</button>
+      </div>
+      
+      <div class="plans-grid" id="plansGrid">
+        ${ceh ? renderPlanCard(ceh) : ''}
+        ${cnsp ? renderPlanCard(cnsp) : ''}
+        ${others.map(renderPlanCard).join('')}
+        <div class="plan-card" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:200px" onclick="showCreatePlanModal()">
+          <div style="width:52px;height:52px;border-radius:50%;background:rgba(0,255,136,0.1);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--green)"><i class="fas fa-plus"></i></div>
+          <div style="color:var(--text-dim);font-size:0.9rem">Create Custom Plan</div>
+        </div>
+      </div>
+    `;
+    
+    // Animate progress bar
+    setTimeout(() => {
+      const bar = $('mainProgressBar');
+      if (bar) bar.style.width = stats.overallProgress + '%';
+    }, 100);
+    
+  } catch (e) {
+    $('contentArea').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Failed to load dashboard</h3><p>${e.message}</p></div>`;
+  }
+}
+function renderPlanCard(plan) {
+  const type = plan.plan_name === 'CEH' ? 'ceh' : plan.plan_name === 'CNSP' ? 'cnsp' : 'custom';
+  const icons = { ceh: 'CEH', cnsp: 'CNSP', custom: plan.plan_name.substring(0, 3).toUpperCase() };
+  
+  return `
+    <div class="plan-card" style="position:relative">
+      <button onclick="event.stopPropagation(); confirmDeletePlan(${plan.id}, '${plan.plan_name}')" 
+        style="position:absolute;top:12px;right:12px;background:rgba(255,68,68,0.15);border:1px solid rgba(255,68,68,0.3);color:var(--red);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:0.75rem;z-index:2">
+        <i class="fas fa-trash"></i>
+      </button>
+      <div onclick="navigateToPlan('${plan.plan_name}')" style="cursor:pointer">
+        <div class="plan-card-header">
+          <div class="plan-icon ${type}">${icons[type]}</div>
+          <div>
+            <div class="plan-name">${plan.plan_name}</div>
+            <div class="plan-desc">${plan.description || ''}</div>
+          </div>
+        </div>
+        <div class="plan-stats">
+          <div class="plan-stat-item">
+            <div class="plan-stat-num">${plan.completed_topics}</div>
+            <div class="plan-stat-lbl">Done</div>
+          </div>
+          <div class="plan-stat-item">
+            <div class="plan-stat-num">${plan.in_progress_topics}</div>
+            <div class="plan-stat-lbl">Active</div>
+          </div>
+          <div class="plan-stat-item">
+            <div class="plan-stat-num">${plan.total_topics}</div>
+            <div class="plan-stat-lbl">Total</div>
+          </div>
+          <div class="plan-stat-item">
+            <div class="plan-stat-num">${plan.progress}%</div>
+            <div class="plan-stat-lbl">Done</div>
+          </div>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" style="width:${plan.progress}%"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function confirmDeletePlan(planId, planName) {
+  $('genericModalTitle').textContent = 'Delete Plan';
+  $('genericModalBody').innerHTML = `
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:3rem;margin-bottom:16px">⚠️</div>
+      <p style="font-size:1rem;margin-bottom:8px">Are you sure you want to delete <strong style="color:var(--red)">${planName}</strong>?</p>
+      <p class="text-dim text-sm">This will permanently delete the plan and ALL its topics, notes, and resources.</p>
+    </div>
+  `;
+  $('genericModalFooter').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeGenericModal()">Cancel</button>
+    <button class="btn btn-danger" onclick="doDeletePlan(${planId})"><i class="fas fa-trash"></i> Yes, Delete</button>
+  `;
+  $('genericModal').classList.add('open');
+}
+
+async function doDeletePlan(planId) {
+  try {
+    await api('DELETE', `/plans/${planId}`);
+    closeGenericModal();
+    toast('Plan deleted successfully', 'info');
+    await renderDashboard();
+  } catch(e) {
+    toast('Failed to delete: ' + e.message, 'error');
+  }
+}
+
+// ===================================================================
+// PROFILE PAGE
+// ===================================================================
+
+async function renderProfile() {
+  setTopbar('My Profile', 'Profile');
+  setActiveNav('profile');
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="loader-ring" style="margin:0 auto"></div></div>`;
+
+  try {
+    const user = await api('GET', '/auth/me');
+
+    $('contentArea').innerHTML = `
+      <div style="max-width:600px;margin:0 auto">
+        
+        <!-- AVATAR CARD -->
+        <div class="card mb-24" style="text-align:center;padding:40px">
+          <div style="position:relative;display:inline-block;margin-bottom:20px">
+            <div id="avatarDisplay" style="
+              width:100px;height:100px;border-radius:50%;
+              background:${user.avatar_color || '#00ff88'};
+              display:flex;align-items:center;justify-content:center;
+              font-size:2.5rem;font-weight:700;color:var(--bg);
+              border:3px solid var(--border-bright);
+              margin:0 auto;
+              overflow:hidden;
+              position:relative;
+            ">
+              ${user.avatar_url 
+                ? `<img src="${user.avatar_url}" style="width:100%;height:100%;object-fit:cover">` 
+                : (user.name || 'U')[0].toUpperCase()
+              }
+            </div>
+            <label style="
+              position:absolute;bottom:0;right:0;
+              width:32px;height:32px;border-radius:50%;
+              background:var(--green);color:var(--bg);
+              display:flex;align-items:center;justify-content:center;
+              cursor:pointer;font-size:0.8rem;
+              border:2px solid var(--bg);
+            " title="Upload photo">
+              <i class="fas fa-camera"></i>
+              <input type="file" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+            </label>
+          </div>
+          <div style="font-family:'Orbitron',monospace;font-size:1.3rem;color:var(--green)">${user.name}</div>
+          <div class="text-dim text-sm mt-8">${user.email}</div>
+          <div class="text-xs font-mono mt-8" style="color:var(--cyan)">// CYBER STUDENT</div>
+          
+          <!-- Avatar color picker -->
+          <div style="margin-top:20px">
+            <div class="text-xs text-dim mb-8">AVATAR COLOR</div>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+              ${['#00ff88','#00d4ff','#a855f7','#ff6b35','#f59e0b','#ff4444','#ec4899','#3b82f6'].map(color => `
+                <div onclick="updateAvatarColor('${color}')" style="
+                  width:28px;height:28px;border-radius:50%;
+                  background:${color};cursor:pointer;
+                  border:2px solid ${user.avatar_color === color ? 'white' : 'transparent'};
+                  transition:transform 0.2s;
+                " onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- EDIT PROFILE CARD -->
+        <div class="card mb-24">
+          <div class="section-title mb-20"><i class="fas fa-user-edit"></i> Edit Profile</div>
+          
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-input" id="profileName" value="${user.name}" placeholder="Your name">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" id="profileEmail" value="${user.email}" placeholder="your@email.com" type="email">
+          </div>
+          
+          <button class="btn btn-primary" onclick="saveProfile()">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </div>
+
+        <!-- CHANGE PASSWORD CARD -->
+        <div class="card mb-24">
+          <div class="section-title mb-20"><i class="fas fa-lock"></i> Change Password</div>
+          
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input class="form-input" id="currentPwd" type="password" placeholder="••••••••">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input class="form-input" id="newPwd" type="password" placeholder="••••••••">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input class="form-input" id="confirmPwd" type="password" placeholder="••••••••">
+          </div>
+          
+          <button class="btn btn-secondary" onclick="changePassword()">
+            <i class="fas fa-key"></i> Update Password
+          </button>
+        </div>
+
+        <!-- DANGER ZONE -->
+        <div class="card" style="border-color:rgba(255,68,68,0.3)">
+          <div class="section-title mb-16" style="color:var(--red)"><i class="fas fa-triangle-exclamation"></i> Danger Zone</div>
+          <p class="text-dim text-sm mb-16">Permanently delete your account and all data. This cannot be undone.</p>
+          <button class="btn btn-danger btn-sm" onclick="confirmDeleteAccount()">
+            <i class="fas fa-skull"></i> Delete My Account
+          </button>
+        </div>
+
+      </div>
+    `;
+  } catch(e) {
+    $('contentArea').innerHTML = `<div class="empty-state"><i class="fas fa-bug"></i><h3>Error loading profile</h3><p>${e.message}</p></div>`;
+  }
+}
+
+async function uploadAvatar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('Image must be under 5MB', 'warning'); return; }
+
+  try {
+    const form = new FormData();
+    form.append('avatar', file);
+    const token = localStorage.getItem('cp_token');
+    const res = await fetch('/api/auth/avatar', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: form
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    const data = await res.json();
+    
+    // Update display
+    const display = $('avatarDisplay');
+    display.innerHTML = `<img src="${data.avatar_url}" style="width:100%;height:100%;object-fit:cover">`;
+    
+    // Update sidebar avatar
+    updateSidebarAvatar();
+    toast('Profile photo updated!', 'success');
+  } catch(e) {
+    toast('Upload failed: ' + e.message, 'error');
+  }
+}
+
+async function updateAvatarColor(color) {
+  try {
+    await api('PUT', '/auth/profile', { avatar_color: color });
+    // Update color circles border
+    document.querySelectorAll('[onclick^="updateAvatarColor"]').forEach(el => {
+      el.style.border = el.getAttribute('onclick').includes(color) ? '2px solid white' : '2px solid transparent';
+    });
+    // Update sidebar avatar
+    updateSidebarAvatar();
+    toast('Color updated!', 'success');
+  } catch(e) {
+    toast('Failed: ' + e.message, 'error');
+  }
+}
+
+async function saveProfile() {
+  const name = $('profileName').value.trim();
+  const email = $('profileEmail').value.trim();
+  if (!name || !email) { toast('Name and email required', 'warning'); return; }
+
+  try {
+    await api('PUT', '/auth/profile', { name, email });
+    currentUser.name = name;
+    currentUser.email = email;
+    updateSidebarAvatar();
+    toast('Profile updated!', 'success');
+  } catch(e) {
+    toast('Failed: ' + e.message, 'error');
+  }
+}
+
+async function changePassword() {
+  const current = $('currentPwd').value;
+  const newP = $('newPwd').value;
+  const confirm = $('confirmPwd').value;
+
+  if (!current || !newP || !confirm) { toast('Fill all password fields', 'warning'); return; }
+  if (newP !== confirm) { toast('New passwords do not match', 'error'); return; }
+  if (newP.length < 6) { toast('Password must be at least 6 characters', 'warning'); return; }
+
+  try {
+    await api('PUT', '/auth/password', { current_password: current, new_password: newP });
+    $('currentPwd').value = '';
+    $('newPwd').value = '';
+    $('confirmPwd').value = '';
+    toast('Password changed successfully!', 'success');
+  } catch(e) {
+    toast('Failed: ' + e.message, 'error');
+  }
+}
+
+function confirmDeleteAccount() {
+  $('genericModalTitle').textContent = 'Delete Account';
+  $('genericModalBody').innerHTML = `
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:3rem;margin-bottom:16px">💀</div>
+      <p style="font-size:1rem;margin-bottom:8px;color:var(--red)"><strong>This will delete EVERYTHING.</strong></p>
+      <p class="text-dim text-sm mb-16">All plans, topics, notes, and files will be permanently deleted.</p>
+      <div class="form-group">
+        <label class="form-label">Type <strong>DELETE</strong> to confirm</label>
+        <input class="form-input" id="deleteConfirmInput" placeholder="DELETE">
+      </div>
+    </div>
+  `;
+  $('genericModalFooter').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeGenericModal()">Cancel</button>
+    <button class="btn btn-danger" onclick="doDeleteAccount()"><i class="fas fa-skull"></i> Delete Forever</button>
+  `;
+  $('genericModal').classList.add('open');
+}
+
+async function doDeleteAccount() {
+  if ($('deleteConfirmInput').value !== 'DELETE') {
+    toast('Type DELETE to confirm', 'warning'); return;
+  }
+  try {
+    await api('DELETE', '/auth/account');
+    closeGenericModal();
+    logout();
+    toast('Account deleted.', 'info');
+  } catch(e) {
+    toast('Failed: ' + e.message, 'error');
+  }
+}
+
+async function updateSidebarAvatar() {
+  try {
+    const user = await api('GET', '/auth/me');
+    currentUser = user;
+    const avatarEl = document.querySelector('.user-avatar');
+    const nameEl = document.querySelector('.user-name');
+    if (avatarEl) {
+      avatarEl.style.color = user.avatar_color || '#00ff88';
+      avatarEl.innerHTML = user.avatar_url 
+        ? `<img src="${user.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` 
+        : (user.name || 'U')[0].toUpperCase();
+    }
+    if (nameEl) nameEl.textContent = user.name;
+  } catch {}
+}
+// ===================================================================
+// PLAN PAGE (Topic List)
+// ===================================================================
+
+async function renderPlanPage(planName) {
+  const pageId = planName.toLowerCase();
+  setTopbar(planName + ' Plan', `<span>${planName}</span> / Roadmap`);
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="loader-ring" style="margin:0 auto"></div></div>`;
+  
+  try {
+    const allPlans = await api('GET', '/plans');
+    plans = allPlans;
+    let plan = plans.find(p => p.plan_name === planName);
+    
+    if (!plan) {
+      $('contentArea').innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-folder-open"></i>
+          <h3>No ${planName} plan found</h3>
+          <p>Create a new plan to get started</p>
+          <button class="btn btn-primary mt-16" onclick="showCreatePlanModal()"><i class="fas fa-plus"></i> Create Plan</button>
+        </div>`;
+      return;
+    }
+    
+    currentPlanId = plan.id;
+    const topics = await api('GET', `/topics/plan/${plan.id}`);
+    
+    $('contentArea').innerHTML = `
+      <div class="section-header mb-16">
+        <div>
+          <h2 style="font-family:'Orbitron',monospace;font-size:1.3rem;color:var(--green)">${planName} Mastery Roadmap</h2>
+          <div class="text-sm text-dim mt-8">${plan.completed_topics}/${plan.total_topics} topics completed · ${plan.progress}% complete</div>
+        </div>
+        <div class="flex gap-12">
+          <button class="btn btn-ghost btn-sm" onclick="showAddTopicModal(${plan.id})"><i class="fas fa-plus"></i> Add Topic</button>
+        </div>
+      </div>
+      
+      <div class="card mb-24">
+        <div class="progress-header mb-12">
+          <span class="section-title"><i class="fas fa-chart-line"></i> Plan Progress</span>
+          <span class="progress-pct">${plan.progress}%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="planProgressBar" style="width:0%"></div>
+        </div>
+      </div>
+      
+      <div class="topic-list" id="topicList">
+        ${topics.length === 0 ? 
+          `<div class="empty-state"><i class="fas fa-list"></i><h3>No topics yet</h3><button class="btn btn-primary mt-16" onclick="showAddTopicModal(${plan.id})"><i class="fas fa-plus"></i> Add First Topic</button></div>` :
+          topics.map(renderTopicItem).join('')
+        }
+      </div>
+    `;
+    
+    setTimeout(() => {
+      const bar = $('planProgressBar');
+      if (bar) bar.style.width = plan.progress + '%';
+    }, 100);
+    
+  } catch (e) {
+    $('contentArea').innerHTML = `<div class="empty-state"><i class="fas fa-bug"></i><h3>Error loading plan</h3><p>${e.message}</p></div>`;
+  }
+}
+
+function renderTopicItem(t) {
+  const statusClass = t.status === 'Completed' ? 'completed' : t.status === 'In Progress' ? 'in-progress' : '';
+  const dotClass = t.status === 'Completed' ? 'status-dot-completed' : t.status === 'In Progress' ? 'status-dot-inprogress' : 'status-dot-notstarted';
+  const completedSubs = (t.subtopics || []).filter(s => s.done).length;
+  
+  return `
+    <div class="topic-item ${statusClass}" onclick="openTopic(${t.id})">
+      <div class="topic-day mono">DAY ${t.day_number}</div>
+      <div class="topic-status-dot ${dotClass}"></div>
+      <div class="topic-info">
+        <div class="topic-title-text">${t.topic_title}</div>
+        <div class="topic-meta">${completedSubs}/${t.subtopics.length} subtopics · ${t.status}</div>
+      </div>
+      <div class="topic-progress-mini">
+        <div class="topic-pct">${t.progress_percentage}%</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" style="width:${t.progress_percentage}%;height:4px"></div>
+        </div>
+      </div>
+      <div class="topic-checks">
+        <div class="check-icon ${t.tryhackme_done ? 'check-done' : 'check-pending'}" title="TryHackMe">TH</div>
+        <div class="check-icon ${t.hackviser_done ? 'check-done' : 'check-pending'}" title="Hackviser">HV</div>
+      </div>
+      <i class="fas fa-chevron-right text-dim text-sm"></i>
+    </div>
+  `;
+}
+
+// ===================================================================
+// TOPIC DETAIL
+// ===================================================================
+
+async function openTopic(topicId) {
+  currentTopicId = topicId;
+  setTopbar('Topic Detail', 'Plan / <span>Topic</span>');
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="loader-ring" style="margin:0 auto"></div></div>`;
+  
+  try {
+    const t = await api('GET', `/topics/${topicId}`);
+    renderTopicDetail(t);
+  } catch (e) {
+    $('contentArea').innerHTML = `<div class="empty-state"><i class="fas fa-bug"></i><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+}
+
+function renderTopicDetail(t) {
+  setTopbar(t.topic_title, `Plan / Day ${t.day_number} / <span>${t.topic_title}</span>`);
+  
+  const statusBadgeClass = t.status === 'Completed' ? 'status-completed' : t.status === 'In Progress' ? 'status-in-progress' : 'status-not-started';
+  const completedSubs = t.subtopics.filter(s => s.done).length;
+  
+  $('contentArea').innerHTML = `
+    <div class="flex items-center gap-12 mb-24">
+      <button class="btn btn-ghost btn-sm" onclick="history.back(); navigateTo(currentPage || 'dashboard')">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <span class="status-badge ${statusBadgeClass}">${t.status}</span>
+      <span class="tag tag-green mono">DAY ${t.day_number}</span>
+      ${t.completed_at ? `<span class="text-sm text-dim">Completed: ${formatDate(t.completed_at)}</span>` : ''}
+    </div>
+    
+    <div class="topic-detail">
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- SUBTOPICS -->
+        <div class="card mb-20">
+          <div class="section-header">
+            <div class="section-title"><i class="fas fa-tasks"></i> Subtopics</div>
+            <div class="text-sm text-dim">${completedSubs}/${t.subtopics.length} done</div>
+          </div>
+          
+          <div class="progress-bar-wrap mb-12">
+            <div class="progress-bar" style="width:${t.subtopics.length > 0 ? (completedSubs/t.subtopics.length)*100 : 0}%"></div>
+          </div>
+          
+          <div class="subtopics-list" id="subtopicsList">
+            ${t.subtopics.map((s, i) => `
+              <div class="subtopic-item ${s.done ? 'done' : ''}" onclick="toggleSubtopic(${t.id}, ${i})">
+                <div class="subtopic-checkbox">${s.done ? '<i class="fas fa-check"></i>' : ''}</div>
+                <span class="subtopic-text">${s.text}</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="add-row mt-16">
+            <input class="form-input" id="newSubInput" placeholder="Add new subtopic..." onkeydown="if(event.key==='Enter') addSubtopic(${t.id})">
+            <button class="btn btn-secondary btn-sm" onclick="addSubtopic(${t.id})"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+        
+        <!-- VIDEO LINKS -->
+        <div class="card mb-20">
+          <div class="section-title mb-16"><i class="fas fa-video"></i> Video Lectures</div>
+          
+          <div id="videoGrid" class="video-grid">
+            ${t.video_links.length === 0 ? '<p class="text-dim text-sm">No videos added yet.</p>' : t.video_links.map((v, i) => renderVideoItem(v, i, t.id)).join('')}
+          </div>
+          
+          <div class="add-row mt-16">
+            <input class="form-input" id="newVideoInput" placeholder="Paste YouTube URL...">
+            <input class="form-input" id="newVideoTitle" placeholder="Video title (optional)">
+            <button class="btn btn-secondary btn-sm" onclick="addVideo(${t.id})"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+        
+        <!-- PDF RESOURCES -->
+        <div class="card mb-20">
+          <div class="section-title mb-16"><i class="fas fa-file-pdf"></i> PDF Resources</div>
+          
+          <div class="pdf-list" id="pdfList">
+            ${t.pdf_links.length === 0 ? '<p class="text-dim text-sm">No PDFs uploaded yet.</p>' : t.pdf_links.map((p, i) => renderPdfItem(p, i, t.id)).join('')}
+          </div>
+          
+          <div class="add-row mt-16">
+            <label class="btn btn-secondary btn-sm" style="cursor:pointer">
+              <i class="fas fa-upload"></i> Upload PDF
+              <input type="file" accept=".pdf" style="display:none" onchange="uploadPdf(${t.id}, this)">
+            </label>
+          </div>
+        </div>
+        
+        <!-- NOTES -->
+        <div class="card">
+          <div class="section-header mb-12">
+            <div class="section-title"><i class="fas fa-note-sticky"></i> Notes</div>
+            <span class="text-xs text-dim" id="notesSaveStatus">Auto-save enabled</span>
+          </div>
+          <textarea class="notes-editor" id="notesEditor" placeholder="Type your notes here... (auto-saved)">${t.notes || ''}</textarea>
+        </div>
+      </div>
+      
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- PROGRESS CARD -->
+        <div class="card mb-20">
+          <div class="section-title mb-16"><i class="fas fa-chart-pie"></i> Topic Progress</div>
+          
+          <div class="progress-header mb-8">
+            <span class="text-sm">Overall</span>
+            <span class="progress-pct" id="topicProgressPct">${t.progress_percentage}%</span>
+          </div>
+          <div class="progress-bar-wrap mb-20">
+            <div class="progress-bar" id="topicProgressBar" style="width:${t.progress_percentage}%"></div>
+          </div>
+          
+          <div class="completion-trackers">
+            <div class="tracker-item ${t.tryhackme_done ? 'done' : ''}" id="thTracker" onclick="toggleTracker(${t.id}, 'tryhackme')">
+              <div class="tracker-toggle"></div>
+              <div class="tracker-icon">🔵</div>
+              <div class="tracker-info">
+                <div class="tracker-name">TryHackMe</div>
+                <div class="tracker-desc">Mark practice as done</div>
+              </div>
+            </div>
+            <div class="tracker-item ${t.hackviser_done ? 'done' : ''}" id="hvTracker" onclick="toggleTracker(${t.id}, 'hackviser')">
+              <div class="tracker-toggle"></div>
+              <div class="tracker-icon">🟣</div>
+              <div class="tracker-info">
+                <div class="tracker-name">Hackviser</div>
+                <div class="tracker-desc">Mark practice as done</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- LINKS -->
+        <div class="card mb-20">
+          <div class="section-title mb-16"><i class="fas fa-link"></i> Practice Links</div>
+          
+          <div class="form-group">
+            <label class="form-label">TryHackMe Room Link</label>
+            <div class="link-row">
+              <input class="form-input" id="thLink" placeholder="https://tryhackme.com/room/..." value="${t.tryhackme_link || ''}">
+              <button class="btn btn-ghost btn-sm btn-icon" onclick="saveLinks(${t.id})" title="Save"><i class="fas fa-save"></i></button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Hackviser Lab Link</label>
+            <div class="link-row">
+              <input class="form-input" id="hvLink" placeholder="https://hackviser.com/..." value="${t.hackviser_link || ''}">
+              <button class="btn btn-ghost btn-sm btn-icon" onclick="saveLinks(${t.id})" title="Save"><i class="fas fa-save"></i></button>
+            </div>
+          </div>
+          
+          <div class="flex gap-8 flex-wrap">
+            ${t.tryhackme_link ? `<a href="${t.tryhackme_link}" target="_blank" class="btn btn-ghost btn-sm"><i class="fas fa-external-link-alt"></i> Open TryHackMe</a>` : ''}
+            ${t.hackviser_link ? `<a href="${t.hackviser_link}" target="_blank" class="btn btn-ghost btn-sm"><i class="fas fa-external-link-alt"></i> Open Hackviser</a>` : ''}
+          </div>
+        </div>
+        
+        <!-- TOPIC MANAGEMENT -->
+        <div class="card">
+          <div class="section-title mb-16"><i class="fas fa-cog"></i> Topic Management</div>
+          <div class="flex flex-col gap-8">
+            <button class="btn btn-ghost btn-sm" onclick="editTopicTitle(${t.id}, '${t.topic_title.replace(/'/g,"\\'")}')">
+              <i class="fas fa-edit"></i> Edit Title
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="deleteTopic(${t.id})">
+              <i class="fas fa-trash"></i> Delete Topic
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Setup notes auto-save
+  const notesEl = $('notesEditor');
+  notesEl.addEventListener('input', () => {
+    clearTimeout(notesAutoSave);
+    $('notesSaveStatus').textContent = 'Saving...';
+    notesAutoSave = setTimeout(async () => {
+      try {
+        await api('PUT', `/topics/${t.id}`, { notes: notesEl.value });
+        $('notesSaveStatus').textContent = 'Saved ✓';
+      } catch { $('notesSaveStatus').textContent = 'Save failed'; }
+    }, 1500);
+  });
+}
+
+function renderVideoItem(v, i, topicId) {
+  const ytId = getYouTubeId(v.url);
+  return `
+    <div class="video-item">
+      <div class="video-thumb" onclick="window.open('${v.url}','_blank')">
+        ${ytId ? 
+          `<img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" alt="thumb" loading="lazy">` :
+          `<div class="video-thumb-placeholder"><i class="fab fa-youtube"></i></div>`
+        }
+        <div class="video-play"><i class="fas fa-play-circle"></i></div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">${v.title || v.url}</div>
+        <div class="video-actions">
+          <a href="${v.url}" target="_blank" class="btn btn-ghost btn-xs"><i class="fas fa-external-link-alt"></i> Open</a>
+          <button class="btn btn-danger btn-xs" onclick="removeVideo(${topicId}, ${i})"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPdfItem(p, i, topicId) {
+  return `
+    <div class="pdf-item">
+      <i class="fas fa-file-pdf pdf-icon"></i>
+      <span class="pdf-name">${p.name}</span>
+      <div class="pdf-actions">
+        <a href="${p.url}" target="_blank" class="btn btn-ghost btn-xs"><i class="fas fa-eye"></i> View</a>
+        <button class="btn btn-danger btn-xs" onclick="removePdf(${topicId}, ${i})"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  `;
+}
+
+// ===================================================================
+// TOPIC INTERACTIONS
+// ===================================================================
+
+async function toggleSubtopic(topicId, index) {
+  try {
+    const t = await api('GET', `/topics/${topicId}`);
+    t.subtopics[index].done = !t.subtopics[index].done;
+    const result = await api('PUT', `/topics/${topicId}`, { subtopics: t.subtopics });
+    
+    if (result.isCompleted) {
+      triggerCompletion(t, result.completedAt);
+    } else {
+      // Refresh topic detail
+      const updated = await api('GET', `/topics/${topicId}`);
+      renderTopicDetail(updated);
+    }
+  } catch (e) { toast('Failed to update: ' + e.message, 'error'); }
+}
+
+async function addSubtopic(topicId) {
+  const input = $('newSubInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  try {
+    const t = await api('GET', `/topics/${topicId}`);
+    t.subtopics.push({ text, done: false });
+    await api('PUT', `/topics/${topicId}`, { subtopics: t.subtopics });
+    input.value = '';
+    const updated = await api('GET', `/topics/${topicId}`);
+    renderTopicDetail(updated);
+    toast('Subtopic added!', 'success');
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+async function toggleTracker(topicId, type) {
+  try {
+    const t = await api('GET', `/topics/${topicId}`);
+    const payload = type === 'tryhackme' ? 
+      { tryhackme_done: !t.tryhackme_done } : 
+      { hackviser_done: !t.hackviser_done };
+    
+    const result = await api('PUT', `/topics/${topicId}`, payload);
+    
+    if (result.isCompleted) {
+      const updated = await api('GET', `/topics/${topicId}`);
+      triggerCompletion(updated, result.completedAt);
+    } else {
+      const updated = await api('GET', `/topics/${topicId}`);
+      renderTopicDetail(updated);
+    }
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+async function saveLinks(topicId) {
+  const thLink = $('thLink')?.value || '';
+  const hvLink = $('hvLink')?.value || '';
+  try {
+    await api('PUT', `/topics/${topicId}`, { tryhackme_link: thLink, hackviser_link: hvLink });
+    toast('Links saved!', 'success');
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+async function addVideo(topicId) {
+  const url = $('newVideoInput').value.trim();
+  const title = $('newVideoTitle').value.trim();
+  if (!url) { toast('Enter a video URL', 'warning'); return; }
+  
+  try {
+    const t = await api('GET', `/topics/${topicId}`);
+    t.video_links.push({ url, title: title || url });
+    await api('PUT', `/topics/${topicId}`, { video_links: t.video_links });
+    $('newVideoInput').value = '';
+    $('newVideoTitle').value = '';
+    const updated = await api('GET', `/topics/${topicId}`);
+    renderTopicDetail(updated);
+    toast('Video added!', 'success');
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+async function removeVideo(topicId, index) {
+  try {
+    const t = await api('GET', `/topics/${topicId}`);
+    t.video_links.splice(index, 1);
+    await api('PUT', `/topics/${topicId}`, { video_links: t.video_links });
+    const updated = await api('GET', `/topics/${topicId}`);
+    renderTopicDetail(updated);
+    toast('Video removed', 'info');
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+async function uploadPdf(topicId, input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  try {
+    const form = new FormData();
+    form.append('pdf', file);
+    const token = localStorage.getItem('cp_token');
+    const res = await fetch(`/api/topics/${topicId}/upload`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: form
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    const updated = await api('GET', `/topics/${topicId}`);
+    renderTopicDetail(updated);
+    toast('PDF uploaded!', 'success');
+  } catch (e) { toast('Upload failed: ' + e.message, 'error'); }
+}
+
+async function removePdf(topicId, index) {
+  try {
+    const t = await api('GET', `/topics/${topicId}`);
+    t.pdf_links.splice(index, 1);
+    await api('PUT', `/topics/${topicId}`, { pdf_links: t.pdf_links });
+    const updated = await api('GET', `/topics/${topicId}`);
+    renderTopicDetail(updated);
+    toast('PDF removed', 'info');
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+async function deleteTopic(topicId) {
+  if (!confirm('Delete this topic? This cannot be undone.')) return;
+  try {
+    await api('DELETE', `/topics/${topicId}`);
+    toast('Topic deleted', 'info');
+    navigateToPlan(currentPage === 'ceh' ? 'CEH' : 'CNSP');
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+function editTopicTitle(topicId, currentTitle) {
+  const newTitle = prompt('Enter new topic title:', currentTitle);
+  if (!newTitle || newTitle === currentTitle) return;
+  api('PUT', `/topics/${topicId}`, { topic_title: newTitle })
+    .then(() => openTopic(topicId))
+    .catch(e => toast('Failed: ' + e.message, 'error'));
+}
+
+// ===================================================================
+// ACHIEVEMENT / COMPLETION
+// ===================================================================
+
+async function triggerCompletion(topic, completedAt) {
+  // Confetti
+  launchConfetti();
+  
+  // Get plan info
+  let planName = 'CEH';
+  try {
+    const allPlans = await api('GET', '/plans');
+    const plan = allPlans.find(p => p.id === topic.plan_id);
+    if (plan) planName = plan.plan_name;
+  } catch {}
+  
+  // Draw achievement card
+  drawAchievementCard({
+    dayNumber: topic.day_number,
+    topicTitle: topic.topic_title,
+    userName: currentUser.name,
+    planName,
+    date: completedAt || new Date().toISOString()
+  });
+  
+  $('achievementModal').classList.add('open');
+  toast('🏆 Day ' + topic.day_number + ' Completed! Achievement unlocked!', 'success', 6000);
+  
+  // Refresh topic detail
+  setTimeout(async () => {
+    const updated = await api('GET', `/topics/${topic.id}`);
+    renderTopicDetail(updated);
+  }, 500);
+}
+
+function drawAchievementCard({ dayNumber, topicTitle, userName, planName, date }) {
+  const canvas = $('achievement-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 480, H = 280;
+  canvas.width = W;
+  canvas.height = H;
+  
+  // Background
+  const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+  bgGrad.addColorStop(0, '#050a0e');
+  bgGrad.addColorStop(0.5, '#0d1820');
+  bgGrad.addColorStop(1, '#050a12');
+  ctx.fillStyle = bgGrad;
+  ctx.roundRect(0, 0, W, H, 16);
+  ctx.fill();
+  
+  // Grid pattern
+  ctx.strokeStyle = 'rgba(0,255,136,0.04)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+  
+  // Glow circle
+  const radGrad = ctx.createRadialGradient(W*0.15, H*0.5, 10, W*0.15, H*0.5, 120);
+  radGrad.addColorStop(0, 'rgba(0,255,136,0.12)');
+  radGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = radGrad;
+  ctx.fillRect(0, 0, W, H);
+  
+  // Border
+  ctx.strokeStyle = 'rgba(0,255,136,0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.roundRect(2, 2, W-4, H-4, 14);
+  ctx.stroke();
+  
+  // Trophy icon area
+  ctx.fillStyle = 'rgba(0,255,136,0.1)';
+  ctx.roundRect(24, H/2-40, 80, 80, 12);
+  ctx.fill();
+  
+  ctx.fillStyle = '#00ff88';
+  ctx.font = 'bold 36px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('🏆', 64, H/2 + 14);
+  
+  // Badge label
+  ctx.fillStyle = 'rgba(0,255,136,0.8)';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('CYBERPREP PRO', 120, 40);
+  
+  ctx.fillStyle = 'rgba(0,212,255,0.6)';
+  ctx.fillText(`// ${planName} CERTIFICATION TRACK`, 120, 60);
+  
+  // Day Completed
+  ctx.fillStyle = '#00ff88';
+  ctx.font = 'bold 32px monospace';
+  ctx.fillText(`Day ${dayNumber} Completed`, 120, 110);
+  
+  // Topic
+  ctx.fillStyle = '#e0f0ff';
+  ctx.font = '14px sans-serif';
+  const shortTitle = topicTitle.length > 45 ? topicTitle.substring(0, 42) + '...' : topicTitle;
+  ctx.fillText(shortTitle, 120, 140);
+  
+  // User name
+  ctx.fillStyle = 'rgba(0,255,136,0.9)';
+  ctx.font = 'bold 13px monospace';
+  ctx.fillText(userName, 120, 175);
+  
+  // Date
+  ctx.fillStyle = 'rgba(120,154,181,0.7)';
+  ctx.font = '11px monospace';
+  ctx.fillText(formatDate(date), 120, 200);
+  
+  // Bottom divider
+  ctx.strokeStyle = 'rgba(0,255,136,0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(24, H-50); ctx.lineTo(W-24, H-50); ctx.stroke();
+  
+  // Footer
+  ctx.fillStyle = 'rgba(0,255,136,0.5)';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('cyberprep.pro  |  #CyberSecurity #CEH #CNSP #EthicalHacking', W/2, H-24);
+}
+
+function downloadAchievementCard() {
+  const canvas = $('achievement-canvas');
+  const link = document.createElement('a');
+  link.download = `cyberprep-achievement-day-${currentTopicId}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  toast('Achievement card downloaded!', 'success');
+}
+
+function shareToLinkedIn() {
+  const url = encodeURIComponent('https://cyberprep.pro');
+  const text = encodeURIComponent('I just completed another day of my CEH/CNSP certification journey using CyberPrep Pro! 🏆 #Cybersecurity #CEH #CNSP #EthicalHacking #CyberPrepPro');
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&summary=${text}`, '_blank');
+}
+
+function closeAchievementModal() {
+  $('achievementModal').classList.remove('open');
+}
+
+function launchConfetti() {
+  const colors = ['#00ff88','#00d4ff','#a855f7','#f59e0b','#ff6b35','#ff4444'];
+  for (let i = 0; i < 80; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      top: ${Math.random() * -20}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      width: ${5 + Math.random() * 10}px;
+      height: ${5 + Math.random() * 10}px;
+      animation-delay: ${Math.random() * 2}s;
+      animation-duration: ${2 + Math.random() * 2}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+}
+
+// ===================================================================
+// PROGRESS PAGE
+// ===================================================================
+
+async function renderProgress() {
+  setTopbar('My Progress', 'Analytics / <span>Progress</span>');
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="loader-ring" style="margin:0 auto"></div></div>`;
+  
+  try {
+    const [stats, allPlans] = await Promise.all([
+      api('GET', '/plans/stats/dashboard'),
+      api('GET', '/plans')
+    ]);
+    
+    const ceh = allPlans.find(p => p.plan_name === 'CEH');
+    const cnsp = allPlans.find(p => p.plan_name === 'CNSP');
+    
+    // Heatmap data
+    let heatData = {};
+    try {
+      const h = await api('GET', `/topics/stats/heatmap/${currentUser.id}`);
+      h.forEach(d => { heatData[d.session_date] = d.count; });
+    } catch {}
+    
+    $('contentArea').innerHTML = `
+      <div class="stats-grid mb-24">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(0,255,136,0.1)"><i class="fas fa-check text-green"></i></div>
+          <div class="stat-label">Total Completed</div>
+          <div class="stat-value text-green">${stats.totalCompleted}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(0,212,255,0.1)"><i class="fas fa-bullseye" style="color:var(--cyan)"></i></div>
+          <div class="stat-label">Overall Progress</div>
+          <div class="stat-value" style="color:var(--cyan)">${stats.overallProgress}%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(255,107,53,0.1)"><i class="fas fa-fire" style="color:var(--orange)"></i></div>
+          <div class="stat-label">Streak</div>
+          <div class="stat-value" style="color:var(--orange)">${stats.streak} days</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(168,85,247,0.1)"><i class="fas fa-list" style="color:var(--purple)"></i></div>
+          <div class="stat-label">Total Topics</div>
+          <div class="stat-value" style="color:var(--purple)">${stats.totalTopics}</div>
+        </div>
+      </div>
+      
+      <!-- CEH vs CNSP Comparison -->
+      <div class="comparison-grid mb-24">
+        ${ceh ? `
+        <div class="card">
+          <div class="section-title mb-16" style="color:var(--green)"><i class="fas fa-shield-halved"></i> CEH Progress</div>
+          <div class="progress-header mb-8">
+            <span class="text-sm">Completion</span>
+            <span class="progress-pct">${ceh.progress}%</span>
+          </div>
+          <div class="progress-bar-wrap mb-16">
+            <div class="progress-bar" style="width:${ceh.progress}%"></div>
+          </div>
+          <div class="flex gap-20 text-sm">
+            <div><span class="text-green">${ceh.completed_topics}</span> <span class="text-dim">Completed</span></div>
+            <div><span class="text-dim">${ceh.total_topics - ceh.completed_topics}</span> <span class="text-dim">Remaining</span></div>
+          </div>
+        </div>` : '<div class="card"><p class="text-dim">No CEH plan found</p></div>'}
+        
+        ${cnsp ? `
+        <div class="card">
+          <div class="section-title mb-16" style="color:var(--purple)"><i class="fas fa-network-wired"></i> CNSP Progress</div>
+          <div class="progress-header mb-8">
+            <span class="text-sm">Completion</span>
+            <span class="progress-pct" style="color:var(--purple)">${cnsp.progress}%</span>
+          </div>
+          <div class="progress-bar-wrap mb-16">
+            <div class="progress-bar" style="width:${cnsp.progress}%;background:linear-gradient(90deg,var(--purple),var(--cyan))"></div>
+          </div>
+          <div class="flex gap-20 text-sm">
+            <div><span style="color:var(--purple)">${cnsp.completed_topics}</span> <span class="text-dim">Completed</span></div>
+            <div><span class="text-dim">${cnsp.total_topics - cnsp.completed_topics}</span> <span class="text-dim">Remaining</span></div>
+          </div>
+        </div>` : '<div class="card"><p class="text-dim">No CNSP plan found</p></div>'}
+      </div>
+      
+      <!-- ACTIVITY HEATMAP -->
+      <div class="card">
+        <div class="section-title mb-20"><i class="fas fa-calendar-days"></i> Study Activity Heatmap</div>
+        <div class="heatmap-grid" id="heatmapGrid"></div>
+        <div class="flex gap-8 mt-16 items-center text-sm text-dim">
+          <span>Less</span>
+          <div class="heatmap-cell" style="width:14px;height:14px"></div>
+          <div class="heatmap-cell level-1" style="width:14px;height:14px"></div>
+          <div class="heatmap-cell level-2" style="width:14px;height:14px"></div>
+          <div class="heatmap-cell level-3" style="width:14px;height:14px"></div>
+          <div class="heatmap-cell level-4" style="width:14px;height:14px"></div>
+          <span>More</span>
+        </div>
+      </div>
+    `;
+    
+    // Build heatmap
+    const heatmapEl = $('heatmapGrid');
+    const today = new Date();
+    for (let i = 181; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      const count = heatData[dateStr] || 0;
+      const level = count === 0 ? 0 : count < 2 ? 1 : count < 4 ? 2 : count < 6 ? 3 : 4;
+      const cell = document.createElement('div');
+      cell.className = `heatmap-cell ${level > 0 ? 'level-' + level : ''}`;
+      cell.title = `${dateStr}: ${count} session(s)`;
+      heatmapEl.appendChild(cell);
+    }
+    
+  } catch (e) {
+    $('contentArea').innerHTML = `<div class="empty-state"><i class="fas fa-bug"></i><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+}
+
+// ===================================================================
+// ALL NOTES PAGE
+// ===================================================================
+
+async function renderAllNotes() {
+  setTopbar('All Notes', 'My Notes');
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="loader-ring" style="margin:0 auto"></div></div>`;
+  
+  try {
+    const allPlans = await api('GET', '/plans');
+    let allTopicsWithNotes = [];
+    
+    for (const plan of allPlans) {
+      const topics = await api('GET', `/topics/plan/${plan.id}`);
+      topics.filter(t => t.notes && t.notes.trim()).forEach(t => {
+        allTopicsWithNotes.push({ ...t, planName: plan.plan_name });
+      });
+    }
+    
+    $('contentArea').innerHTML = `
+      <div class="section-header mb-20">
+        <div class="section-title"><i class="fas fa-note-sticky"></i> All Notes (${allTopicsWithNotes.length})</div>
+      </div>
+      
+      ${allTopicsWithNotes.length === 0 ? 
+        `<div class="empty-state"><i class="fas fa-note-sticky"></i><h3>No notes yet</h3><p>Open a topic and start writing notes!</p></div>` :
+        `<div style="display:flex;flex-direction:column;gap:16px">
+          ${allTopicsWithNotes.map(t => `
+            <div class="card" onclick="openTopic(${t.id})" style="cursor:pointer">
+              <div class="flex items-center gap-12 mb-12">
+                <span class="tag ${t.planName === 'CEH' ? 'tag-green' : 'tag-purple'}">${t.planName}</span>
+                <span class="mono text-dim text-xs">DAY ${t.day_number}</span>
+                <span class="text-sm font-bold">${t.topic_title}</span>
+              </div>
+              <div class="text-sm text-dim" style="white-space:pre-line;max-height:80px;overflow:hidden">${t.notes}</div>
+              <div class="text-xs text-dim mt-8"><i class="fas fa-arrow-right"></i> Click to open topic</div>
+            </div>
+          `).join('')}
+        </div>`
+      }
+    `;
+  } catch (e) {
+    $('contentArea').innerHTML = `<div class="empty-state"><i class="fas fa-bug"></i><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+}
+
+// ===================================================================
+// PLANS PAGE
+// ===================================================================
+
+async function renderPlansPage() {
+  setTopbar('All Plans', 'Plans');
+  $('contentArea').innerHTML = `<div class="empty-state"><div class="loader-ring" style="margin:0 auto"></div></div>`;
+  
+  try {
+    const allPlans = await api('GET', '/plans');
+    plans = allPlans;
+    
+    $('contentArea').innerHTML = `
+      <div class="section-header mb-20">
+        <div class="section-title"><i class="fas fa-folder-open"></i> All Plans</div>
+        <button class="btn btn-primary btn-sm" onclick="showCreatePlanModal()"><i class="fas fa-plus"></i> New Plan</button>
+      </div>
+      <div class="plans-grid">
+        ${allPlans.map(renderPlanCard).join('')}
+      </div>
+    `;
+  } catch (e) {
+    $('contentArea').innerHTML = `<div class="empty-state"><i class="fas fa-bug"></i><h3>Error</h3></div>`;
+  }
+}
+
+// ===================================================================
+// MODALS
+// ===================================================================
+
+function showCreatePlanModal() {
+  $('genericModalTitle').textContent = 'Create New Plan';
+  $('genericModalBody').innerHTML = `
+    <div class="form-group">
+      <label class="form-label">Plan Name</label>
+      <input class="form-input" id="newPlanName" placeholder="e.g., OSCP, CompTIA Security+" autofocus>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <input class="form-input" id="newPlanDesc" placeholder="Brief description of this plan">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Total Days</label>
+      <input class="form-input" id="newPlanDays" type="number" value="30" min="1" max="365">
+    </div>
+  `;
+  $('genericModalFooter').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeGenericModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="doCreatePlan()"><i class="fas fa-plus"></i> Create Plan</button>
+  `;
+  $('genericModal').classList.add('open');
+  setTimeout(() => $('newPlanName')?.focus(), 100);
+}
+
+async function doCreatePlan() {
+  const name = $('newPlanName').value.trim();
+  const desc = $('newPlanDesc').value.trim();
+  const days = parseInt($('newPlanDays').value) || 30;
+  
+  if (!name) { toast('Plan name required', 'warning'); return; }
+  
+  try {
+    await api('POST', '/plans', { plan_name: name, description: desc, total_days: days });
+    closeGenericModal();
+    toast('Plan created!', 'success');
+    await renderDashboard();
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+function showAddTopicModal(planId) {
+  $('genericModalTitle').textContent = 'Add New Topic';
+  $('genericModalBody').innerHTML = `
+    <div class="form-group">
+      <label class="form-label">Day Number</label>
+      <input class="form-input" id="newTopicDay" type="number" min="1" value="1">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Topic Title</label>
+      <input class="form-input" id="newTopicTitle" placeholder="e.g., Network Scanning Techniques" autofocus>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subtopics (one per line)</label>
+      <textarea class="form-input" id="newTopicSubs" rows="5" placeholder="Nmap Basics&#10;Port Scanning&#10;OS Detection"></textarea>
+    </div>
+  `;
+  $('genericModalFooter').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeGenericModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="doAddTopic(${planId})"><i class="fas fa-plus"></i> Add Topic</button>
+  `;
+  $('genericModal').classList.add('open');
+}
+
+async function doAddTopic(planId) {
+  const day = parseInt($('newTopicDay').value) || 1;
+  const title = $('newTopicTitle').value.trim();
+  const subsRaw = $('newTopicSubs').value;
+  const subs = subsRaw.split('\n').map(s => s.trim()).filter(Boolean);
+  
+  if (!title) { toast('Topic title required', 'warning'); return; }
+  
+  try {
+    const result = await api('POST', '/topics', { plan_id: planId, day_number: day, topic_title: title, subtopics: subs });
+    closeGenericModal();
+    toast('Topic added!', 'success');
+    const plan = plans.find(p => p.id === planId);
+    if (plan) await renderPlanPage(plan.plan_name);
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+function closeGenericModal() {
+  $('genericModal').classList.remove('open');
+}
+
+// Click outside to close modals
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('open');
+  }
+});
+
+// ===================================================================
+// START APP
+// ===================================================================
+
+init();
+</script>
+</body>
+</html>
